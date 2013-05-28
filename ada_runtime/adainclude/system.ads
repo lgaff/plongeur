@@ -109,7 +109,7 @@ package System is
    Default_Priority : constant Priority := 48;
 
 private
-
+   Run_Time_Name : constant String := "Plongeur Run Time"; 
    type Address is mod Memory_Size;
    Null_Address : constant Address := 0;
 
@@ -125,11 +125,11 @@ private
 
    Backend_Divide_Checks     : constant Boolean := False;
    Backend_Overflow_Checks   : constant Boolean := True;
-   Command_Line_Args         : constant Boolean := True;
-   Configurable_Run_Time     : constant Boolean := False;
+   Command_Line_Args         : constant Boolean := False;
+   Configurable_Run_Time     : constant Boolean := True;
    Denorm                    : constant Boolean := True;
    Duration_32_Bits          : constant Boolean := False;
-   Exit_Status_Supported     : constant Boolean := True;
+   Exit_Status_Supported     : constant Boolean := False;
    Fractional_Fixed_Ops      : constant Boolean := False;
    Frontend_Layout           : constant Boolean := False;
    Machine_Overflows         : constant Boolean := False;
@@ -137,7 +137,7 @@ private
    Preallocated_Stacks       : constant Boolean := False;
    Signed_Zeros              : constant Boolean := True;
    Stack_Check_Default       : constant Boolean := False;
-   Stack_Check_Probes        : constant Boolean := True;
+   Stack_Check_Probes        : constant Boolean := False;
    Stack_Check_Limits        : constant Boolean := False;
    Support_64_Bit_Divides    : constant Boolean := True;
    Support_Aggregates        : constant Boolean := True;
@@ -145,9 +145,9 @@ private
    Support_Composite_Compare : constant Boolean := True;
    Support_Long_Shifts       : constant Boolean := True;
    Always_Compatible_Rep     : constant Boolean := False;
-   Suppress_Standard_Library : constant Boolean := False;
+   Suppress_Standard_Library : constant Boolean := True;
    Use_Ada_Main_Program_Name : constant Boolean := False;
-   ZCX_By_Default            : constant Boolean := True;
-   GCC_ZCX_Support           : constant Boolean := True;
+   ZCX_By_Default            : constant Boolean := False;
+   GCC_ZCX_Support           : constant Boolean := False;
 
 end System;
