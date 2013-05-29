@@ -1,0 +1,22 @@
+--  Project definition for the runtime library. This builds for x86.
+--  adapted from osdev wiki barebones guide.
+
+library project gnat is
+    
+  for Source_Dirs use ("ada_runtime/adainclude");
+  for Object_Dir use "objects";
+
+  package Builder is
+     Basic_Switches := ("-gnat2005", "-g", "-x", "-a", "-gnatg",
+			"-gnatec=../gnat.adc", "-m32", "-march=i386");
+     for Default_Switches ("Ada") use Basic_Switches;
+  end Builder;
+  
+  package Compiler is
+     for Default_Switches ("Ada") use ("-O2", "-ffunction-sections", "-fdata-sections");
+  end Compiler;
+  
+  for Library_Kind use "static";
+  for Library_Name use "gnat-4.6";
+  for Library_Dir use "ada_runtime/adalib";
+end gnat;
