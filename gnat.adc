@@ -1,7 +1,9 @@
--- A bunch of pragmas cutting down Ada builtins so it will run
--- on the bare metal. Taken from the Ada barebones article on wiki.osdev.org
--- see http://gcc.gnu.org/onlinedocs/gcc-4.7.3/gnat_ugn_unw/Configuration-Pragmas.html#Configuration-Pragmas
--- for details.
+--  A bunch of pragmas cutting down Ada builtins so it will run
+--  on the bare metal. Taken from the Ada barebones article on wiki.osdev.org
+--  see 
+--  http://gcc.gnu.org/onlinedocs/gcc-4.7.3/gnat_ugn_unw/
+--  Configuration-Pragmas.html#Configuration-Pragmas
+--  for details.
 
 pragma Discard_Names;
 pragma Restrictions (No_Enumeration_Maps);
