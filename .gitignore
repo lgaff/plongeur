@@ -2,3 +2,5 @@
 *.ali
 *.o
 *.a
+objects/
+stub
