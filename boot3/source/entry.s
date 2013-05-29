@@ -19,11 +19,11 @@ section .text
 align 4
 
 
-entry:
 	dd MAGIC
 	dd FLAGS
 	dd CHECKSUM
-
+entry:
+	xchg bx, bx
 	mov esp, stack + STACKSIZE
 	mov eax, magic
 	mov ebx, mbd
@@ -31,7 +31,6 @@ entry:
 	call main
 
 hang:
-	hlt
 	jmp hang
 
 section .bss
