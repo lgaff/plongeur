@@ -109,7 +109,7 @@ package System is
    Default_Priority : constant Priority := 48;
 
 private
-   Run_Time_Name : constant String := "Plongeur Run Time"; 
+   Run_Time_Name : constant String := "Plongeur Run Time";
    type Address is mod Memory_Size;
    Null_Address : constant Address := 0;
 
@@ -149,5 +149,4 @@ private
    Use_Ada_Main_Program_Name : constant Boolean := False;
    ZCX_By_Default            : constant Boolean := False;
    GCC_ZCX_Support           : constant Boolean := False;
-
 end System;
