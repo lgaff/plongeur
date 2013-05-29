@@ -27,7 +27,7 @@ entry:
 	mov esp, stack + STACKSIZE
 	mov eax, magic
 	mov ebx, mbd
-	sti
+	cli
 	call main
 
 hang:
