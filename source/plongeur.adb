@@ -1,7 +1,10 @@
 with System.Machine_Code; use System.Machine_Code;
 with Interfaces; use Interfaces;
 with Kernel; use Kernel;
-
+with Descriptor_Tables;
+--  We're just including descriptor_tables here now to export
+--  the gp symbol for entry.o. Later on we'll use it.
+pragma Unreferenced (Descriptor_Tables);
 procedure Plongeur is
 begin
    Asm ("xchg %%bx, %%bx",

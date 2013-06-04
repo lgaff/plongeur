@@ -8,23 +8,28 @@ ENTRY (entry)
 SECTIONS
 {
     . = 0x00100000;
+    .mboot : {
+    	   *(.mboot)
+	  }
 
-    .text :{
-        code = .; _code = .; __code = .;
+    .init : {
+    	  *(.init)
+	}
+    	      
+    . += 0xC0000000;
+    .text : AT(ADDR(.text) - 0xC0000000) {
         *(.text)
+    }
+
+    .rodata ALIGN (0x1000) : AT(ADDR(.rodata) - 0xC0000000) {
         *(.rodata)
     }
 
-    .rodata ALIGN (0x1000) : {
-        *(.rodata)
-    }
-
-    .data ALIGN (0x1000) : {
-        data = .; _data = .; __data = .;
+    .data ALIGN (0x1000) : AT(ADDR(.data) - 0xC0000000) {
         *(.data)
     }
 
-    .bss : {
+    .bss : AT(ADDR(.bss) - 0xC0000000) {
         sbss = .;
         bss = .; _bss = .; __bss = .;
         *(COMMON)
