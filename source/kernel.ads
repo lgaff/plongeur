@@ -1,8 +1,5 @@
 with Interfaces; use Interfaces;
 
-package Kernel_Main is
-
+package Kernel is
    Cksum : Unsigned_32 := 16#DEAD#;
-
-   procedure Stub;
-end Kernel_Main;
+end Kernel;

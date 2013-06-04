@@ -2,7 +2,7 @@ Project Plongeur is
   for Source_Dirs use ("source/");
   for Object_Dir use "objects";
   for Exec_Dir use ".";
-  for Main use ("kernel_main.adb");
+  for Main use ("kernel.adb");
 
   package Builder is
      Basic_Switches := ("-gnat2005", "-g", "-x", "-a", "-gnatg",
