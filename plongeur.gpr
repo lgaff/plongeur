@@ -1,0 +1,24 @@
+Project Plongeur is
+  for Source_Dirs use ("source/");
+  for Object_Dir use "objects";
+  for Exec_Dir use ".";
+  for Main use ("kernel_main.adb");
+
+  package Builder is
+     Basic_Switches := ("-gnat2005", "-g", "-x", "-a", "-gnatg",
+			"-gnatec=../gnat.adc", "-gnaty-I", "-gnaty+d");
+     for Default_Switches ("Ada") use Basic_Switches & ("-m32", "-march=i386");
+
+  end Builder;
+
+  package Compiler is
+     for Default_Switches ("Ada") use
+       ("-O0", "-g", "-ggdb", "-ffunction-sections", "-fdata-sections");
+  end Compiler;
+
+  package Linker is
+     for Default_Switches ("Ada") use
+       ("-Wl,-gc-sections", "-static", "-nostartfiles", "-nodefaultlibs",
+	"-T../source/linker.ld", "-v");
+  end Linker;
+end Plongeur;
