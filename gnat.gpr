@@ -17,6 +17,6 @@ library project gnat is
   end Compiler;
   
   for Library_Kind use "static";
-  for Library_Name use "gnat";
+  for Library_Name use "gnat-4.6";
   for Library_Dir use "ada_runtime/adalib";
 end gnat;
