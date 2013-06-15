@@ -11,4 +11,9 @@ package Kernel.Utilities is
    function To_Global_Descriptor is new Ada.Unchecked_Conversion
      (Source => Unsigned_64,
       Target => Global_Descriptor);
+
+   function To_Unsigned_32 is new Ada.Unchecked_Conversion
+     (Source => System.Address,
+      Target => Unsigned_32);
+
 end Kernel.Utilities;
