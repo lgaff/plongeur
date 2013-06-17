@@ -16,6 +16,9 @@ package Kernel.Data_Structures is
    type Unsigned_4 is mod 2 ** 4;
    for Unsigned_4'Size use 4;
 
+   type Unsigned_12 is mod 2 ** 12;
+   for Unsigned_12'Size use 12;
+
 -- ----------  Table pointers  -----------------
 
    type GDT_Pointer is record
@@ -38,7 +41,7 @@ package Kernel.Data_Structures is
 
    type Page_Directory_Entry is
       record
-         Address           : Page_Address;
+         VAddress           : Page_Address;
          Metadata          : Page_Metadata;
          Page_Size         : Flag;
          Access_Bit        : Flag;
@@ -59,12 +62,12 @@ package Kernel.Data_Structures is
          Access_Bit      at 0 range 5 .. 5;
          Page_Size       at 0 range 7 .. 7;
          Metadata        at 1 range 1 .. 3;
-         Address         at 1 range 4 .. 23;
+         VAddress         at 1 range 4 .. 23;
       end record;
 
    type Page_Table_Entry is
       record
-         Address           : Page_Address;
+         VAddress           : Page_Address;
          Metadata          : Page_Metadata;
          Global            : Flag;
          Dirty             : Flag;
@@ -87,16 +90,16 @@ package Kernel.Data_Structures is
          Dirty           at 0 range 7 .. 7;
          Global          at 1 range 0 .. 0;
          Metadata        at 1 range 1 .. 3;
-         Address         at 1 range 4 .. 23;
+         VAddress         at 1 range 4 .. 23;
       end record;
 
    Table_Size : constant Natural := 1024;
 
-   subtype Table_Range is Natural range 1 .. Table_Size;
+   subtype Table_Range is Natural range 0 .. (Table_Size - 1);
 
    type Page_Table is array (Table_Range) of Page_Table_Entry;
 
-   type Page_Directory is array (Table_Range) of Page_Table;
+   type Page_Directory is array (Table_Range) of Page_Directory_Entry;
    for Page_Directory'Alignment use 16#1000#;
 
 -- ----------  Descriptor tables  ---------------------
