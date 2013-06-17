@@ -4,7 +4,7 @@ package body Kernel.Descriptor_Tables is
    pragma Import
      (Convention => C,
       Entity => Gdt_Flush,
-      External_Name => "gdt_flush");
+      External_Name => "gdtflush");
 
    procedure Install_GDT (Gdtp : out GDT_Pointer;
                          Table : out GDT) is
