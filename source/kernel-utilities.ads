@@ -6,6 +6,7 @@
 -------------------------------------------------------------------------------
 with Kernel.Data_Structures; use Kernel.Data_Structures;
 with Ada.Unchecked_Conversion;
+with System;
 
 package Kernel.Utilities is
    function To_Global_Descriptor is new Ada.Unchecked_Conversion
@@ -16,4 +17,16 @@ package Kernel.Utilities is
      (Source => System.Address,
       Target => Unsigned_32);
 
+   function To_Page_Table_Entry is new Ada.Unchecked_Conversion
+     (Source => Unsigned_32,
+      Target => Page_Table_Entry);
+
+   function Physical_To_Virtual (Physical_Address : System.Address)
+                                return Page_Address;
+
+--  private
+--     type Page_Conversion_Median is record
+--        Virtual_Address : Page_Address;
+--        Padding : Unsigned_12;
+--     end record;
 end Kernel.Utilities;
