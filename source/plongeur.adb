@@ -2,11 +2,13 @@ with System.Machine_Code; use System.Machine_Code;
 with Interfaces; use Interfaces;
 with Kernel; use Kernel;
 with Kernel.Descriptor_Tables; use Kernel.Descriptor_Tables;
---  We're just including descriptor_tables here now to export
---  the gp symbol for entry.o. Later on we'll use it.
-pragma Unreferenced (Kernel.Descriptor_Tables);
+with Kernel.Initialisation; use Kernel.Initialisation;
+with Kernel.Utilities; use Kernel.Utilities;
+
 procedure Plongeur is
 begin
+   Go_To_Higher_Half (Kernel_Page_Directory, Identity_Mapped_Table);
+   Install_GDT (Gp, Global_Descriptor_Table);
    Asm ("xchg %%bx, %%bx",
         Volatile => True);
    Asm ("mov %%ebx, %0",
