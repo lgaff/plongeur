@@ -21,7 +21,7 @@ package Kernel.Utilities is
      (Source => Unsigned_32,
       Target => Page_Table_Entry);
 
-   function Physical_To_Virtual (Physical_Address : System.Address)
+   function Align_Address (Physical_Address : Unsigned_32)
                                 return Page_Address;
 
 --  private

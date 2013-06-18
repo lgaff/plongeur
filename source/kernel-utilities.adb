@@ -1,9 +1,13 @@
+with Interfaces;
+
 package body Kernel.Utilities is
-   function Physical_To_Virtual (Physical_Address : System.Address)
-                                return Page_Address is
+   function Align_Address (Physical_Address : Unsigned_32)
+                          return Page_Address is
       Temp : Unsigned_32 := 0;
    begin
-      Temp := To_Unsigned_32 (Physical_Address);
+      Temp := Interfaces.Shift_Right
+        (Value => Physical_Address,
+         Amount => 12);
       return Page_Address (Temp mod 2 ** 20);
-   end Physical_To_Virtual;
+   end Align_Address;
 end Kernel.Utilities;
