@@ -31,8 +31,8 @@ private
       Privilege => 0,
       Executable => Code,
       Accessed => Not_Accessed,
-      Direction => 1,
-      Readable => 0);
+      Direction => 0,
+      Readable => 1);
 
    Data_Segment : Global_Descriptor :=
      (Base_Low => 0,
@@ -47,6 +47,6 @@ private
       Privilege => 0,
       Executable => Data,
       Accessed => Not_Accessed,
-      Direction => 1,
-      Readable => 0);
+      Direction => 0,
+      Readable => 1);
 end Kernel.Descriptor_Tables;
