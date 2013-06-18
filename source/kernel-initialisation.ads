@@ -11,5 +11,5 @@ package Kernel.Initialisation is
 private
    Page_Is_Present : constant Flag := 16#1#;
    Page_Is_Writable : constant Flag := 16#1#;
-   Kernel_Fake_Base : constant Page_Address := 2#10000000000000000000#;
+   Kernel_Fake_Base : constant Unsigned_32 := 16#40000000#;
 end Kernel.Initialisation;
