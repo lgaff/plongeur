@@ -19,4 +19,5 @@ gnatmake --RTS=`pwd`ada_runtime -P plongeur.gpr
 Output will be a binary named plongeur in the root folder. you can use grub-mkrescue to create a bootable ISO for running it, or point any other multiboot compatible loader in its direction.
 At the moment, there are debug statements for controlling program flow in bochs.
 
+Credit goes to Luke Guest <https://github.com/Lucretia> for his guide on setting up the Ada runtime for a bare x86 environment <http://wiki/osdev.org/Ada_Bare_Bones>
 
