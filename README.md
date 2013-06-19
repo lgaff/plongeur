@@ -5,19 +5,18 @@ An experiment in OS dev using Ada.
 
 Plongeur is (will be?) a Monolithic kernel in as purely Ada as I can possibly make it.
 
-More details to come later. In the absence of a makefile, you can get by building it with the following steps:
+Since for the time being, gprbuild has defeated me, I've created a primitive shell script for building a bootable ISO using Grub.
 
-* Build the runtime
-gnatmake -P gnat.gpr
+just run buildimage.sh from the root directory. 
 
-* Assemble the entry stub
-nasm -f elf -o objects/entry.o source/entry.s
+You'll need:
 
-* Compile and link plongeur:
-gnatmake --RTS=`pwd`ada_runtime -P plongeur.gpr
+- GCC 4.6
+- Nasm >=2.10.01
+- xorriso >=1.2.4
+- grub 2.0
 
-Output will be a binary named plongeur in the root folder. you can use grub-mkrescue to create a bootable ISO for running it, or point any other multiboot compatible loader in its direction.
-At the moment, there are debug statements for controlling program flow in bochs.
+The current build has no gating for debug statements, these wont affect anyone not using bochs with magic_break enabled, however.
 
 Credit goes to Luke Guest <https://github.com/Lucretia> for his guide on setting up the Ada runtime for a bare x86 environment <http://wiki/osdev.org/Ada_Bare_Bones>
 
