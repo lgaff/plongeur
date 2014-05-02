@@ -4,6 +4,7 @@ with Kernel; use Kernel;
 with Kernel.Descriptor_Tables; use Kernel.Descriptor_Tables;
 with Kernel.Initialisation; use Kernel.Initialisation;
 with Kernel.Utilities; use Kernel.Utilities;
+with Devices.Console; use Devices.Console;
 
 procedure Plongeur is
 begin
@@ -22,6 +23,8 @@ begin
         Volatile => True);
    Asm ("xchg %%bx, %%bx",
         Volatile => True);
+   Blank;
+   Write("Hello, World!", Screen_Width'First, Screen_Height'First);
    loop
       Asm ("nop",
            Volatile => True);
