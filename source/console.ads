@@ -1,0 +1,138 @@
+--  Module      : Devices.Console
+--  Description : Specification for simplistic 80*40 8-bit text console
+--                Using the VGA buffer.
+--  Author      : Lindsay Gaff
+--  Email       : lindsaygaff@gmail.com
+--  License     : Unrestricted
+-------------------------------------------------------------------------------
+with System;
+
+Package Console is
+	type Blink_Flag is 
+		(Blink,
+	 	 Dont_Blink);
+	for Blink_Flag'Size use 1;
+
+	for Blink_Flag use
+	(Blink => 1,
+	 Dont_Blink => 0);
+
+	type Foreground_Color is 
+		(Black,
+		 Low_Blue,
+		 Low_Green,
+		 Low_Cyan,
+		 Low_Red,
+		 Low_Magenta,
+		 Brown,
+		 Light_Grey,
+		 Dark_Grey,
+		 High_Blue,
+		 High_Green,
+		 High_Cyan,
+		 High,Red,
+		 High_Magenta,
+		 Yellow,
+		 White);
+
+	for Foreground_Color use
+		(Black => 16#0#,
+		 Low_Blue => 16#1#,
+		 Low_Green => 16#2#,
+		 Low_Cyan => 16#3#,
+		 Low_Red => 16#4#,
+		 Low_Magenta => 16#5#,
+		 Brown => 16#6#,
+		 Light_Grey => 16#7#,
+		 Dark_Grey => 16#8#,
+		 High_Blue => 16#9#,
+		 High_Green => 16#A#,
+		 High_Cyan => 16#B#,
+		 High_Red => 16#C#,
+		 High_Magenta => 16#D#,
+		 Yellow => 16#E#,
+		 White => 16#F#);
+
+	for Foreground_Color'Size use 4;
+
+	type Background_Color is
+		(Black,
+		 Blue,
+		 Green,
+		 Cyan,
+		 Red,
+		 Magenta,
+		 Brown,
+		 Light_Grey);
+
+	for Background_Color use
+		(Black => 16#0#,
+		 Low_Blue => 16#1#,
+		 Low_Green => 16#2#,
+		 Low_Cyan => 16#3#,
+		 Low_Red => 16#4#,
+		 Low_Magenta => 16#5#,
+		 Brown => 16#6#,
+		 Light_Grey => 16#7#);
+
+	for Background_Color'Size use 3;
+
+	type Attribute is record
+		Foreground_Color : Foreground_Color,
+		Background_Color : Background_Color,
+		Blink : Blink_Flag
+	end record;
+
+	for Attribute use record
+		Foreground_Color at 0 range 0..3;
+		Background_Color at 0 range 4..6;
+		Blink at 0 range 7..7;
+	end record;
+
+	type Character_Cell is record
+		Char : Character,
+		Attributes : Attribute
+	end record;
+
+	for Character_Cell'Size use 16;
+
+	for Character_Cell use record
+		Char at 0 range 0..7;
+		Attributes at 1 range 0..7;
+	end record;
+
+	Columns : Constant Natural 80;
+	Rows : Constant Natural 25;
+
+	subtype Screen_Width is Natural range 1 .. Columns;
+	subtype Screen_Height is Natural range 1 .. Rows;
+
+	type Row is array (Screen_Width) of Character_Cell;
+	type Column is array (Screen_Height) of Character_Cell;
+
+	type Text_Console is array (Screen_Height) of Row;
+
+	-- TODO: I may modify this to be private and use setters for updating fg/bg colors
+	Current_Attribute : Attribute :=
+		(Foreground_Color => High_Green,
+		 Background_Color => Light_Grey,
+		 Blink => Dont_Blink;
+		);
+
+	procedure Write
+		(Char : in Character;
+		 X : in Screen_Width;
+		 Y : in Screen_Height;
+		 Attributes : in Attribute := Current_Attribute);
+
+	procedure Write
+		(Str : in String;
+	     X : in Screen_Width;
+	     Y : in Screen_Height;
+	     Attributes : in Attribute := Current_Attribute);
+
+	procedure Blank;
+private
+	Console : Text_Console;
+	for Console'Address use System'To_Address(16#B8000#);
+end Console;
