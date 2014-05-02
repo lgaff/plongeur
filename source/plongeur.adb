@@ -4,7 +4,7 @@ with Kernel; use Kernel;
 with Kernel.Descriptor_Tables; use Kernel.Descriptor_Tables;
 with Kernel.Initialisation; use Kernel.Initialisation;
 with Kernel.Utilities; use Kernel.Utilities;
-with Devices.Console; use Devices.Console;
+with Console; use Console;
 
 procedure Plongeur is
 begin
