@@ -24,7 +24,7 @@ begin
    Asm ("xchg %%bx, %%bx",
         Volatile => True);
    Blank;
-   Write("Hello, World!", Screen_Width'First, Screen_Height'First);
+   Write ("Hello, World!", Screen_Width'First, Screen_Height'First);
    loop
       Asm ("nop",
            Volatile => True);
