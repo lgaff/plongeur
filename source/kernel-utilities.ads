@@ -10,14 +10,14 @@ with System;
 
 package Kernel.Utilities is
    type Double_Word is record
-      High_Word : Unsigned_16;
       Low_Word : Unsigned_16;
+      High_Word : Unsigned_16;
    end record;
    for Double_Word'Size use 32;
 
    type Double_Byte is record
-      High_Byte : Unsigned_8;
       Low_Byte : Unsigned_8;
+      High_Byte : Unsigned_8;
    end record;
    for Double_Byte'Size use 16;
 
