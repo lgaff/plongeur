@@ -32,8 +32,6 @@ package body Kernel.Initialisation is
                        Page_Present => Page_Is_Present);
       end loop;
 
-      Asm ("xchg %%bx, %%bx",
-          Volatile => True);
       Fake_Address := Kernel_Fake_Base + To_Unsigned_32 (Table'Address);
       Page_Aligned_Address := Align_Address (Fake_Address);
       --  Entries 0 and 768 correspond to physical blocks 0-4MiB and
@@ -41,8 +39,6 @@ package body Kernel.Initialisation is
       --  is physically in the first 4 MiB, so we need to Identity map
       --  this, and place the identical page entry at 3 GiB to get us to
       --  the higher half. After this, we invalidate the zeroth entry.
-      Asm ("xchg %%bx, %%bx",
-          Volatile => True);
       Directory (0) := (VAddress => Page_Aligned_Address,
                         Metadata => 0,
                         Page_Size => 0,
@@ -52,8 +48,6 @@ package body Kernel.Initialisation is
                         Ring_Access => 0,
                         Page_Present => Page_Is_Present,
                         Read_Write => Page_Is_Writable);
-      Asm ("xchg %%bx, %%bx",
-                 Volatile => True);
       Directory (768) := (VAddress => Page_Aligned_Address,
                           Metadata => 0,
                           Page_Size => 0,
@@ -67,16 +61,13 @@ package body Kernel.Initialisation is
       Page_Directory_Address := Kernel_Fake_Base +
         To_Unsigned_32 (Directory'Address);
 
-      Asm ("xchg %%bx, %%bx" & LF & HT &
-           "mov %0, %%eax" & LF & HT &
+      Asm ("mov %0, %%eax" & LF & HT &
            "mov %%eax, %%cr3" & LF & HT &
            "mov %%cr0, %%eax" & LF & HT &
            "orl $0x80000000, %%eax" & LF & HT &
-           "xchg %%bx, %%bx" & LF & HT &
            "mov %%eax, %%cr0",
           Inputs => Unsigned_32'Asm_Input ("m",
                     Page_Directory_Address),
           Volatile => True);
-
    end Go_To_Higher_Half;
 end Kernel.Initialisation;
