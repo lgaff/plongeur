@@ -58,8 +58,8 @@ package body Console is
    procedure Update_Cursor_Position is
       C_Pos : Double_Byte;
    begin
-      C_Pos := To_Double_Byte (Cursor_Y
-             * Rows + Cursor_X);
+      C_Pos := To_Double_Byte ((Cursor_Y - 1)
+             * Columns + (Cursor_X - 1));
       Write_Port (CRTC_Controller_Address_Register, CRTC_Cursor_Location_High);
       Write_Port (CRTC_Controller_Data_Register, C_Pos.High_Byte);
       Write_Port (CRTC_Controller_Address_Register, CRTC_Cursor_Location_Low);
