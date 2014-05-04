@@ -6,6 +6,7 @@
 --  License     : Unrestricted
 -------------------------------------------------------------------------------
 with System;
+with Interfaces; use Interfaces;
 
 package Console is
    type Blink_Flag is
@@ -101,11 +102,11 @@ package Console is
       Attributes at 1 range 0 .. 7;
    end record;
 
-   Columns : constant Natural := 80;
-   Rows : constant Natural := 25;
+   Columns : constant Unsigned_16 := 80;
+   Rows : constant Unsigned_16 := 25;
 
-   subtype Screen_Width is Natural range 1 .. Columns;
-   subtype Screen_Height is Natural range 1 .. Rows;
+   subtype Screen_Width is Unsigned_16 range 1 .. Columns;
+   subtype Screen_Height is Unsigned_16 range 1 .. Rows;
 
    type Row is array (Screen_Width) of Character_Cell;
    type Column is array (Screen_Height) of Character_Cell;
@@ -116,8 +117,8 @@ package Console is
    --  use setters for updating fg/bg colors
    Current_Attribute : Attribute :=
       (Foreground => High_Green,
-       Background => Light_Grey,
-       Blink => Dont_Blink
+       Background => Blue,
+       Blink => Blink
       );
 
    procedure Write
@@ -132,6 +133,10 @@ package Console is
        Y : in Screen_Height;
        Attributes : in Attribute := Current_Attribute);
 
+   procedure Write
+      (Str : in String;
+       Attributes : in Attribute := Current_Attribute);
+
    procedure Blank;
 private
    Plongeur_Console : Text_Console;
@@ -139,4 +144,9 @@ private
    --  This import is required to satisfy to the compiler that we
    --  know what we're doing by manually setting the address
    pragma Import (Ada, Plongeur_Console);
+   procedure Update_Cursor_Position;
+
+   Cursor_X : Screen_Width := 1;
+   Cursor_Y : Screen_Height := 1;
+
 end Console;
