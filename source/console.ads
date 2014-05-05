@@ -118,7 +118,7 @@ package Console is
    Current_Attribute : Attribute :=
       (Foreground => High_Green,
        Background => Blue,
-       Blink => Blink
+       Blink => Dont_Blink
       );
 
    procedure Write
