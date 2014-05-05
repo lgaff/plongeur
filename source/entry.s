@@ -67,9 +67,9 @@ gdt:
 	db 0xFF, 0xFF, 0, 0, 0, 10010010b, 11001111b, 0x40 ; data segment
 gdt_end:	
 
+
 common magic 4
-mbd:
-common mdb 4
+common mbd 4
 section .bss
 
 align 32
