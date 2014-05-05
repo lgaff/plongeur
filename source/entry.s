@@ -21,23 +21,22 @@ section .text
 	dd CHECKSUM	
 
 entry:
-	xchg bx, bx
 	;; Load the fake GDT until we install the page directory
 	;; flush whatever GRUB put there as we go
 	lgdt [fakegdt]
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
+	mov cx, 0x10
+	mov ds, cx
+	mov es, cx
+	mov fs, cx
+	mov gs, cx
+	mov ss, cx
 	jmp 0x08:higherhalf
 higherhalf:
 	;; until we get paging up, the segment descriptors will translate
 	;; link addresses for us by adding 0x40000000 (0xC0100000 + 0x40000000 = 0x10000 :) )
 	mov esp, stack + STACKSIZE
-	mov eax, magic
-	mov ebx, mbd
+	mov dword [magic], eax
+	mov dword [mbd], ebx
 	cli
 	call main
 
@@ -67,13 +66,12 @@ gdt:
 	db 0xFF, 0xFF, 0, 0, 0, 10011010b, 11001111b, 0x40 ; code segment
 	db 0xFF, 0xFF, 0, 0, 0, 10010010b, 11001111b, 0x40 ; data segment
 gdt_end:	
-	
 
-section .bss
-align 32
-magic:
-	resb 4
+common magic 4
 mbd:
-	resb 4
+common mdb 4
+section .bss
+
+align 32
 stack:
 	resb STACKSIZE
