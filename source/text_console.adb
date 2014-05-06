@@ -1,5 +1,6 @@
 with VGA.Text_Mode;
 with Kernel.ASCII; use Kernel.ASCII;
+with Kernel.Utilities; use Kernel.Utilities;
 
 package body Text_Console is
    procedure Put (Str : in String) is
@@ -31,6 +32,23 @@ package body Text_Console is
             Put (Number_Symbols (Buffer (Index) + 1));
          end if;
       end loop;
+   end Put;
+
+   procedure Put (Num : in Interfaces.Unsigned_32;
+                  Base : in Integer := Hexadecimal) is
+   begin
+      Put (To_Integer (Num), Base);
+   end Put;
+
+   procedure Put (Num : in Interfaces.Unsigned_64;
+                  Base : in Integer := Hexadecimal) is
+      Parts : constant Double_Double := To_Double_Double (Num);
+   begin
+      if Parts.High_Double > 0 then
+         Put (Parts.High_Double, Base);
+         Put (" ");
+      end if;
+      Put (Parts.Low_Double, Base);
    end Put;
 
    procedure Put_Line is
