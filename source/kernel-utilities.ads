@@ -9,6 +9,12 @@ with Ada.Unchecked_Conversion;
 with System;
 
 package Kernel.Utilities is
+   type Double_Double is record
+      Low_Double : Unsigned_32;
+      High_Double : Unsigned_32;
+   end record;
+   for Double_Double'Size use 64;
+
    type Double_Word is record
       Low_Word : Unsigned_16;
       High_Word : Unsigned_16;
@@ -20,6 +26,10 @@ package Kernel.Utilities is
       High_Byte : Unsigned_8;
    end record;
    for Double_Byte'Size use 16;
+
+   function To_Double_Double is new Ada.Unchecked_Conversion
+      (Source => Unsigned_64,
+       Target => Double_Double);
 
    function To_Double_Word is new Ada.Unchecked_Conversion
       (Source => Unsigned_32,
@@ -41,6 +51,18 @@ package Kernel.Utilities is
      (Source => System.Address,
       Target => Unsigned_32);
 
+   function To_Address is new Ada.Unchecked_Conversion
+      (Source => Unsigned_32,
+       Target => System.Address);
+
+   function To_Integer is new Ada.Unchecked_Conversion
+      (Source => System.Address,
+       Target => Integer);
+
+   function To_Integer is new Ada.Unchecked_Conversion
+      (Source => Unsigned_32,
+       Target => Integer);
+
    function To_Page_Table_Entry is new Ada.Unchecked_Conversion
      (Source => Unsigned_32,
       Target => Page_Table_Entry);
@@ -53,11 +75,5 @@ package Kernel.Utilities is
 --        Virtual_Address : Page_Address;
 --        Padding : Unsigned_12;
 --     end record;
-   procedure Write_Port (Port : Unsigned_16;
-                  Value : Unsigned_8);
-   procedure Write_Port (Port : in Unsigned_16;
-                  Value : in Unsigned_16);
-   function Read_Port (Port : in Unsigned_16) return Unsigned_16;
-   function Read_Port (Port : in Unsigned_16) return Unsigned_8;
    procedure Magic_Break;
 end Kernel.Utilities;
