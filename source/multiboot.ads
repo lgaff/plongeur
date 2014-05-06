@@ -12,47 +12,39 @@ package Multiboot is
    Search : constant Unsigned_32 := 8192;
    Header_Align : constant Unsigned_32 := 4;
 
-   type Multiboot_Flag is
-      (Not_Set,
-       Set);
-   for Multiboot_Flag use
-      (Not_Set => 0,
-       Set => 1);
-   for Multiboot_Flag'Size use 1;
-
    type Header_Flags is record
-      Page_Align  : Multiboot_Flag;
-      Memory_Info : Multiboot_Flag;
-      Video_Mode  : Multiboot_Flag;
-      Unused_3    : Multiboot_Flag;
-      Unused_4    : Multiboot_Flag;
-      Unused_5    : Multiboot_Flag;
-      Unused_6    : Multiboot_Flag;
-      Unused_7    : Multiboot_Flag;
-      Unused_8    : Multiboot_Flag;
-      Unused_9    : Multiboot_Flag;
-      Unused_10   : Multiboot_Flag;
-      Unused_11   : Multiboot_Flag;
-      Unused_12   : Multiboot_Flag;
-      Unused_13   : Multiboot_Flag;
-      Unused_14   : Multiboot_Flag;
-      Unused_15   : Multiboot_Flag;
-      Aout_Kludge : Multiboot_Flag;
-      Unused_17   : Multiboot_Flag;
-      Unused_18   : Multiboot_Flag;
-      Unused_19   : Multiboot_Flag;
-      Unused_20   : Multiboot_Flag;
-      Unused_21   : Multiboot_Flag;
-      Unused_22   : Multiboot_Flag;
-      Unused_23   : Multiboot_Flag;
-      Unused_24   : Multiboot_Flag;
-      Unused_25   : Multiboot_Flag;
-      Unused_26   : Multiboot_Flag;
-      Unused_27   : Multiboot_Flag;
-      Unused_28   : Multiboot_Flag;
-      Unused_29   : Multiboot_Flag;
-      Unused_30   : Multiboot_Flag;
-      Unused_31   : Multiboot_Flag;
+      Page_Align  : Boolean;
+      Memory_Info : Boolean;
+      Video_Mode  : Boolean;
+      Unused_3    : Boolean;
+      Unused_4    : Boolean;
+      Unused_5    : Boolean;
+      Unused_6    : Boolean;
+      Unused_7    : Boolean;
+      Unused_8    : Boolean;
+      Unused_9    : Boolean;
+      Unused_10   : Boolean;
+      Unused_11   : Boolean;
+      Unused_12   : Boolean;
+      Unused_13   : Boolean;
+      Unused_14   : Boolean;
+      Unused_15   : Boolean;
+      Aout_Kludge : Boolean;
+      Unused_17   : Boolean;
+      Unused_18   : Boolean;
+      Unused_19   : Boolean;
+      Unused_20   : Boolean;
+      Unused_21   : Boolean;
+      Unused_22   : Boolean;
+      Unused_23   : Boolean;
+      Unused_24   : Boolean;
+      Unused_25   : Boolean;
+      Unused_26   : Boolean;
+      Unused_27   : Boolean;
+      Unused_28   : Boolean;
+      Unused_29   : Boolean;
+      Unused_30   : Boolean;
+      Unused_31   : Boolean;
    end record;
    for Header_Flags'Size use 32;
    for Header_Flags use record
@@ -138,20 +130,22 @@ package Multiboot is
    pragma Convention (C, Info_Symbol_Table);
    pragma Unchecked_Union (Info_Symbol_Table);
 
+   function Get_Binary_Format return Binary_Formats;
+
    type Info_Flags is record
-      Memory_Info_Present       : Multiboot_Flag;
-      Boot_Device_Present       : Multiboot_Flag;
-      Command_Line_Present      : Multiboot_Flag;
-      Modules_Present           : Multiboot_Flag;
-      Aout_Symbols_Present      : Multiboot_Flag;
-      Elf_Header_Present        : Multiboot_Flag;
-      Memory_Map_Present        : Multiboot_Flag;
-      Drive_Info_Present        : Multiboot_Flag;
-      Config_Table_Present      : Multiboot_Flag;
-      Bootloader_Name_Present   : Multiboot_Flag;
-      APM_Table_Present         : Multiboot_Flag;
-      VBE_Info_Present          : Multiboot_Flag;
-      FB_Info_Present           : Multiboot_Flag;
+      Memory_Info_Present       : Boolean;
+      Boot_Device_Present       : Boolean;
+      Command_Line_Present      : Boolean;
+      Modules_Present           : Boolean;
+      Aout_Symbols_Present      : Boolean;
+      Elf_Header_Present        : Boolean;
+      Memory_Map_Present        : Boolean;
+      Drive_Info_Present        : Boolean;
+      Config_Table_Present      : Boolean;
+      Bootloader_Name_Present   : Boolean;
+      APM_Table_Present         : Boolean;
+      VBE_Info_Present          : Boolean;
+      FB_Info_Present           : Boolean;
       Reserved                  : Unsigned_16;
    end record;
 
@@ -227,19 +221,20 @@ package Multiboot is
 --  Memory map information and structs
 --  -----------------------------------
 
-   type Memory_Type is new Unsigned_32 range 0 .. 5;
+--  type Memory_Type is new Integer range 0 .. 5;
 
-   Available        : constant Memory_Type := 16#1#;
-   Reserved         : constant Memory_Type := 16#2#;
-   ACPI_Reclaimable : constant Memory_Type := 16#3#;
-   Non_Volatile     : constant Memory_Type := 16#4#;
-   Bad_Memory       : constant Memory_Type := 16#5#;
+   Available        : constant Unsigned_32 := 16#1#;
+   Reserved         : constant Unsigned_32 := 16#2#;
+   ACPI_Reclaimable : constant Unsigned_32 := 16#3#;
+   Non_Volatile     : constant Unsigned_32 := 16#4#;
+   Bad_Memory       : constant Unsigned_32 := 16#5#;
 
    type Memory_Map_Entry is record
       Size     : Unsigned_32;
-      Address  : Unsigned_64;
+      Address_Low  : Unsigned_32;
+      Address_High : Unsigned_32;
       Length   : Unsigned_64;
-      Usage    : Memory_Type;
+      Usage    : Unsigned_32;
    end record;
 
    type Info_Memory is record
@@ -248,6 +243,14 @@ package Multiboot is
    end record;
 
    pragma Convention (C, Info_Memory);
+
+   type Memory_Map_Entry_Pointer is access Memory_Map_Entry;
+
+   function First_Memory_Map_Entry return Memory_Map_Entry_Pointer;
+
+   function Next_Memory_Map_Entry
+      (Current : Memory_Map_Entry_Pointer)
+      return Memory_Map_Entry_Pointer;
 
 --  -----------------------------------
 --  Drive information and structs
@@ -265,7 +268,7 @@ package Multiboot is
 --  APM information and structs
 --  -----------------------------------
    type APM_Flags is record
-      Graphics_Table_Available : Multiboot_Flag;
+      Graphics_Table_Available : Boolean;
    end record;
    for APM_Flags'Size use 16;
    for APM_Flags use record
