@@ -141,6 +141,6 @@ private
 
    Cursor_X : Screen_Width := 1;
    Cursor_Y : Screen_Height := 1;
-   Tab_Size : Screen_Width := 4;
+   Tab_Size : Screen_Width := 8;
 
 end VGA.Text_Mode;

@@ -1,5 +1,6 @@
 with VGA; use VGA;
 with Kernel.Utilities; use Kernel.Utilities;
+with X86_IO; use X86_IO;
 with Kernel.ASCII; use Kernel.ASCII;
 
 package body VGA.Text_Mode is
