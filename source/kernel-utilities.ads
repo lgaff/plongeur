@@ -39,6 +39,10 @@ package Kernel.Utilities is
       (Source => Standard.Integer,
        Target => Double_Word);
 
+   function To_Double_Word is new Ada.Unchecked_Conversion
+      (Source => System.Address,
+       Target => Double_Word);
+
    function To_Double_Byte is new Ada.Unchecked_Conversion
       (Source => Unsigned_16,
        Target => Double_Byte);
@@ -66,6 +70,10 @@ package Kernel.Utilities is
    function To_Page_Table_Entry is new Ada.Unchecked_Conversion
      (Source => Unsigned_32,
       Target => Page_Table_Entry);
+
+   function PDE_To_PTE is new Ada.Unchecked_Conversion
+      (Source => Page_Directory_Entry,
+       Target => Page_Table_Entry);
 
    function Align_Address (Physical_Address : Unsigned_32)
                                 return Page_Address;

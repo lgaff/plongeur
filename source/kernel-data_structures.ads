@@ -4,6 +4,7 @@
 --  Email       : lindsaygaff@gmail.com
 --  License     : Unrestricted
 -------------------------------------------------------------------------------
+
 package Kernel.Data_Structures is
 
 -- ----------  Useful primitives  --------------
@@ -231,5 +232,65 @@ package Kernel.Data_Structures is
 
    type GDT_Length is range 0 .. 8191;
    type GDT is array (GDT_Length range <>) of Global_Descriptor;
+
+   type IDT_Pointer is record
+      Size : Unsigned_16;
+      Offset : Unsigned_32;
+   end record;
+   for IDT_Pointer'Size use 48;
+
+   for IDT_Pointer use record
+      Size      at 0 range 0 .. 15;
+      Offset    at 0 range 16 .. 47;
+   end record;
+
+   type Gates is range 0 .. 15;
+   for Gates'Size use 4;
+   Interrupt_Gate_386 : constant Gates := 16#0E#;
+--   type Gates is
+--      (Not_Set,
+--       Task_Gate_386,
+--       Interrupt_Gate_286,
+--       Trap_Gate_286,
+--       Interrupt_Gate_386,
+--       Trap_Gate_386);
+--   for Gates'Size use 4;
+--   for Gates use
+--      (Not_Set => 0,
+--       Task_Gate_386 => 5,
+--       Interrupt_Gate_286 => 6,
+--       Trap_Gate_286 => 7,
+--       Interrupt_Gate_386 => 14,
+--       Trap_Gate_386 => 15);
+
+   type DPL is range 0 .. 3;
+   for DPL'Size use 2;
+
+   type Interrupt_Descriptor is record
+      Offset_Low : Unsigned_16;
+      Selector : Unsigned_16;
+      Unused : Unsigned_8;
+      Gate_Type : Gates;
+      Segment : Flag;
+      Privilege_Level : DPL;
+      Present : Flag;
+      Offset_High : Unsigned_16;
+   end record;
+   for Interrupt_Descriptor'Size use 64;
+
+   for Interrupt_Descriptor use record
+      Offset_Low at 0 range 0 .. 15;
+      Selector at 2 range 0 .. 15;
+      Unused at 4 range 0 .. 7;
+      Gate_Type at 5 range 0 .. 3;
+      Segment at 5 range 4 .. 4;
+      Privilege_Level at 5 range 5 .. 6;
+      Present at 5 range 7 .. 7;
+      Offset_High at 6 range 0 .. 15;
+   end record;
+
+   type IDT_Length is range 0 .. 255;
+   type IDT is array (IDT_Length range <>) of Interrupt_Descriptor;
+--  for IDT'Alignment use 16#1000#;
 
 end Kernel.Data_Structures;

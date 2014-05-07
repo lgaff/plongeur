@@ -14,7 +14,10 @@ procedure Plongeur is
    Memory_Map_Ptr : Memory_Map_Entry_Pointer;
 begin
    Go_To_Higher_Half (Kernel_Page_Directory, Identity_Mapped_Table);
+   PDE_As_PTE (Kernel_Page_Directory, P_To_V_Map);
    Install_GDT (Gp, Global_Descriptor_Table);
+   Install_IDT (Ip, Interrupt_Descriptor_Table);
+   Initialise_Pics (32);
    Blank;
    Put_Line ("Hello, World!");
    if Magic = Magic_Value then
@@ -45,6 +48,7 @@ begin
    Put_Line ("Memory Map");
    Put_Line ("Size" & TAB & "Address" & TAB & "Length" & TAB & "Type");
    Put_Line (Horizontal_Line);
+
    Memory_Map_Ptr := First_Memory_Map_Entry;
 
    Memory_Map_Loop :
@@ -75,8 +79,7 @@ begin
       exit Memory_Map_Loop when Memory_Map_Ptr = null;
    end loop Memory_Map_Loop;
 
-   Initialise_Pics (32);
-
+   Trap_Interrupt;
    loop
       Asm ("nop",
            Volatile => True);
