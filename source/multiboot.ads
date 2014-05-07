@@ -245,6 +245,7 @@ package Multiboot is
    pragma Convention (C, Info_Memory);
 
    type Memory_Map_Entry_Pointer is access Memory_Map_Entry;
+   pragma No_Strict_Aliasing (Memory_Map_Entry_Pointer);
 
    function First_Memory_Map_Entry return Memory_Map_Entry_Pointer;
 
