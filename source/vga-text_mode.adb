@@ -27,12 +27,20 @@ package body VGA.Text_Mode is
       for Index in Str'First .. Str'Last loop
          case Str (Index) is
             when FF =>
-               Cursor_Y := Cursor_Y + 1;
-               Cursor_X := 1;
-            when TAB =>
-               if Cursor_X + Tab_Size >= Columns then
+               if Cursor_Y = Rows then
+                  Scroll;
+               else
                   Cursor_Y := Cursor_Y + 1;
                   Cursor_X := 1;
+               end if;
+            when TAB =>
+               if Cursor_X + Tab_Size >= Columns then
+                  if Cursor_Y = Rows then
+                     Scroll;
+                  else
+                     Cursor_Y := Cursor_Y + 1;
+                     Cursor_X := 1;
+                  end if;
                else
                   Cursor_X := Cursor_X + (Tab_Size - Cursor_X mod Tab_Size);
                end if;
@@ -42,13 +50,14 @@ package body VGA.Text_Mode is
                   Cursor_Y,
                   Attributes);
                if Cursor_X = Columns then
-                  Cursor_Y := Cursor_Y + 1;
-                  Cursor_X := 1;
+                  if Cursor_Y = Rows then
+                     Scroll;
+                  else
+                     Cursor_Y := Cursor_Y + 1;
+                     Cursor_X := 1;
+                  end if;
                else
                   Cursor_X := Cursor_X + 1;
-               end if;
-               if Cursor_Y = Rows then
-                  Scroll;
                end if;
          end case;
       end loop;
@@ -60,7 +69,7 @@ package body VGA.Text_Mode is
       --  TODO: Write a memcpy routine, and use it to implement this.
       for Y in Screen_Height'First .. Screen_Height'Last - 1 loop
          for X in Screen_Width'First .. Screen_Width'Last - 1 loop
-            Plongeur_Console (Y)(X) := Plongeur_Console (Y + 1)(X + 1);
+            Plongeur_Console (Y)(X) := Plongeur_Console (Y + 1)(X);
          end loop;
       end loop;
       for X in Screen_Width'First .. Screen_Width'Last loop
