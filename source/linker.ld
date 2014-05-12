@@ -2,7 +2,7 @@ OUTPUT_FORMAT(elf32-i386)
 
 /* Tell the linker which startup code to use, we do this as there is no way to do this (well not easily) from the GNAT tools. */
 STARTUP(entry.o)
-INPUT (interrupts.o)
+INPUT (interrupt_stub.o)
 
 ENTRY (entry)
 
