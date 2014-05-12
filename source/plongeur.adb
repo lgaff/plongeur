@@ -80,7 +80,9 @@ begin
                                                System_Map);
       exit Memory_Map_Loop when Memory_Map_Ptr = null;
    end loop Memory_Map_Loop;
+   Initialise_Interrupts;
    Text_Console.Put_Line ("Yo Yo Gabba etc.");
+   Trap_Interrupt;
    loop
       Asm ("nop",
            Volatile => True);

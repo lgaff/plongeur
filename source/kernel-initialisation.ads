@@ -16,6 +16,9 @@ package Kernel.Initialisation is
    procedure Default_Interrupt_Handler
       (Registers : in CPU.Interrupt_Register_File);
 
+   procedure Default_Irq_Handler
+      (Registers : in CPU.Interrupt_Register_File);
+
    procedure Initialise_Interrupts;
 
 private

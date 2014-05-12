@@ -32,7 +32,7 @@ section .text
         irq%1:
 	  cli
 	  push byte 0
-	  push byte %2
+	  push byte %1
 	  jmp irq_common_stub
 %endmacro
 
@@ -100,6 +100,7 @@ isr_common_stub:
 	pusha			; Push all our registers
 	mov ax, ds
 	push eax		; data segment descriptor
+	push esp
 
 	mov ax, 0x10
 	mov ds, ax
@@ -109,6 +110,7 @@ isr_common_stub:
 
 	call fault_handler
 
+	pop eax
 	pop eax
 	mov ds, ax
 	mov es, ax
@@ -131,12 +133,16 @@ irq_common_stub:
 	pusha
 	mov ax, ds		; save data segment descriptor
 	push eax
+	push esp
+
 	mov ax, 0x10 		; load kernel data segment descriptor
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
 	call irq_handler
+
+	pop ebx
 	pop ebx
 	mov ds, bx
 	mov es, bx

@@ -79,10 +79,22 @@ package body Kernel.Initialisation is
          (Registers.Interrupt_Number));
    end Default_Interrupt_Handler;
 
+   procedure Default_Irq_Handler
+      (Registers : in CPU.Interrupt_Register_File) is
+   begin
+      Text_Console.Put
+         ("IRQ called for unimplemented IRQ number: ");
+      Text_Console.Put_Line (To_Integer
+         (Registers.Interrupt_Number));
+   end Default_Irq_Handler;
+
    procedure Initialise_Interrupts is
    begin
       for Index in Unsigned_32 range 0 .. 255 loop
          Register_Interrupt_Handler (Index, Default_Interrupt_Handler'Access);
+      end loop;
+      for Index in Unsigned_32 range 32 .. 47 loop
+         Register_Interrupt_Handler (Index, Default_Irq_Handler'Access);
       end loop;
       Asm ("sti", Volatile => True);
       Text_Console.Put_Line ("Interrupts re-enabled");

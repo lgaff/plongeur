@@ -1,5 +1,5 @@
 with PIC;
-with System.Machine_Code; use System.Machine_Code;
+--  with System.Machine_Code; use System.Machine_Code;
 
 package body Interrupts is
    procedure Register_Interrupt_Handler (Index : in Unsigned_32;
@@ -9,21 +9,19 @@ package body Interrupts is
    end Register_Interrupt_Handler;
 
    procedure Fault_Handler (Registers : in CPU.Interrupt_Register_File) is
-   pragma Unreferenced (Registers);
+      Handler : Interrupt_Handler;
    begin
-      loop
-         Asm ("nop", Volatile => True);
-      end loop;
+      Handler := ISR_Register (Registers.Interrupt_Number);
+      Handler (Registers);
    end Fault_Handler;
 
    procedure Irq_Handler (Registers : in CPU.Interrupt_Register_File) is
       Handler : Interrupt_Handler;
    begin
       --  We need to signal the PIC's that the interrupt is being handled.
-      PIC.Send_EOI (Unsigned_8 (Registers.Interrupt_Number mod 16));
-
-      Handler := ISR_Register (Registers.Interrupt_Number);
+      PIC.Send_EOI (Unsigned_8 (Registers.Interrupt_Number));
+      Handler := ISR_Register (Registers.Interrupt_Number + 32);
       Handler (Registers);
-
    end Irq_Handler;
+
 end Interrupts;

@@ -24,9 +24,8 @@ package Interrupts is
 
    procedure Fault_Handler (Registers : in CPU.Interrupt_Register_File);
    procedure Irq_Handler (Registers : in CPU.Interrupt_Register_File);
-
-   pragma Export (C, Fault_Handler, "fault_handler");
-   pragma Export (C, Irq_Handler, "irq_handler");
+   pragma Export (Ada, Fault_Handler, "fault_handler");
+   pragma Export (Ada, Irq_Handler, "irq_handler");
 
 private
    ISR_Register : ISR_Register_Type;
