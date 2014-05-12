@@ -110,6 +110,7 @@ package VGA.Text_Mode is
    type Column is array (Screen_Height) of Character_Cell;
 
    type Text_Console is array (Screen_Height) of Row;
+   for Text_Console'Alignment use 4;
 
    --  TODO: I may modify this to be private and
    --  use setters for updating fg/bg colors
