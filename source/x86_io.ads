@@ -7,6 +7,9 @@ package X86_IO is
    subtype Output_Port is Unsigned_16
       range Unsigned_16'First .. Unsigned_16'Last;
 
+   subtype IO_Port is Unsigned_16
+      range Unsigned_16'First .. Unsigned_16'Last;
+
    procedure Write_Port (Port : Output_Port;
                   Value : Unsigned_8);
    procedure Write_Port (Port : in Output_Port;
