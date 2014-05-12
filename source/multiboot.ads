@@ -130,8 +130,6 @@ package Multiboot is
    pragma Convention (C, Info_Symbol_Table);
    pragma Unchecked_Union (Info_Symbol_Table);
 
-   function Get_Binary_Format return Binary_Formats;
-
    type Info_Flags is record
       Memory_Info_Present       : Boolean;
       Boot_Device_Present       : Boolean;
@@ -247,12 +245,6 @@ package Multiboot is
    type Memory_Map_Entry_Pointer is access Memory_Map_Entry;
    pragma No_Strict_Aliasing (Memory_Map_Entry_Pointer);
 
-   function First_Memory_Map_Entry return Memory_Map_Entry_Pointer;
-
-   function Next_Memory_Map_Entry
-      (Current : Memory_Map_Entry_Pointer)
-      return Memory_Map_Entry_Pointer;
-
 --  -----------------------------------
 --  Drive information and structs
 --  -----------------------------------
@@ -323,18 +315,34 @@ package Multiboot is
       VBE              : Info_VBE;
    end record;
    pragma Convention (C, Multiboot_Info);
+   for Multiboot_Info'Alignment use 4;
 
-   Multiboot_Info_Address : constant Unsigned_32;
+   Multiboot_Info_Address : constant System.Address;
    pragma Import (C, Multiboot_Info_Address, "mbd");
 
-   System_Map : Multiboot_Info;
-   for System_Map'Address
-   use System'To_Address (Multiboot_Info_Address);
-   pragma Volatile (System_Map);
-   pragma Import (C, System_Map);
+   type Multiboot_Info_Access is access Multiboot_Info;
+
+   function Get_Binary_Format (System_Map : Multiboot_Info_Access)
+      return Binary_Formats;
+
+   function First_Memory_Map_Entry (System_Map : Multiboot_Info_Access)
+      return Memory_Map_Entry_Pointer;
+
+   function Next_Memory_Map_Entry
+      (Current : Memory_Map_Entry_Pointer;
+       System_Map : Multiboot_Info_Access)
+      return Memory_Map_Entry_Pointer;
+
+   function Get_System_Map (Info_Address : System.Address)
+      return Multiboot_Info_Access;
 
    subtype Magic_Values is Unsigned_32;
    Magic_Value : constant Magic_Values := 16#2BADB002#;
    Magic : constant Magic_Values;
    pragma Import (Assembly, Magic, "magic");
+--   System_Map : constant Multiboot_Info;
+--   for System_Map'Address
+--   use Multiboot_Info_Address;
+--   pragma Import (Ada, System_Map);
+--   pragma Volatile (System_Map);
 end Multiboot;

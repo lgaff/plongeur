@@ -12,9 +12,10 @@ use type Multiboot.Magic_Values;
 
 procedure Plongeur is
    Memory_Map_Ptr : Memory_Map_Entry_Pointer;
+   System_Map : Multiboot_Info_Access;
 begin
+   System_Map := Get_System_Map (Multiboot_Info_Address);
    Go_To_Higher_Half (Kernel_Page_Directory, Identity_Mapped_Table);
-   PDE_As_PTE (Kernel_Page_Directory, P_To_V_Map);
    Install_GDT (Gp, Global_Descriptor_Table);
    Install_IDT (Ip, Interrupt_Descriptor_Table);
    Initialise_Pics (32);
@@ -26,7 +27,7 @@ begin
       Put_Line ("Magic value incorrect.");
    end if;
 
-   if Get_Binary_Format = ELF then
+   if Get_Binary_Format (System_Map) = ELF then
       Put ("Multiboot header includes Elf header at ");
       Put_Line (To_Integer (System_Map.Symbol_Table.Elf_Address), Hexadecimal);
    end if;
@@ -49,7 +50,7 @@ begin
    Put_Line ("Size" & TAB & "Address" & TAB & "Length" & TAB & "Type");
    Put_Line (Horizontal_Line);
 
-   Memory_Map_Ptr := First_Memory_Map_Entry;
+   Memory_Map_Ptr := First_Memory_Map_Entry (System_Map);
 
    Memory_Map_Loop :
    loop
@@ -75,11 +76,11 @@ begin
             Put (To_Integer (Memory_Map_Ptr.Usage));
       end case;
       Put_Line;
-      Memory_Map_Ptr := Next_Memory_Map_Entry (Memory_Map_Ptr);
+      Memory_Map_Ptr := Next_Memory_Map_Entry (Memory_Map_Ptr,
+                                               System_Map);
       exit Memory_Map_Loop when Memory_Map_Ptr = null;
    end loop Memory_Map_Loop;
-
-   Trap_Interrupt;
+   Text_Console.Put_Line ("Yo Yo Gabba etc.");
    loop
       Asm ("nop",
            Volatile => True);
